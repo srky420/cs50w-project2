@@ -3,6 +3,20 @@ from django.db import models
 import datetime
 
 
+# Category choices
+CATEGORIES = [
+    ("CSA", "Clothing and Accessories"),
+    ("SPT", "Sports"),
+    ("HM", "Home"),
+    ("ELT", "Electronics"),
+    ("TY", "Toys"),
+    ("BMD", "Books and Media"),
+    ("HAB", "Health and Beauty"),
+    ("OTH", "Others")
+]
+
+
+# User model
 class User(AbstractUser):
     pass
 
@@ -11,11 +25,14 @@ class User(AbstractUser):
 class AuctionListing(models.Model):
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=100)
+    starting_bid = models.IntegerField()
+    category = models.CharField(max_length=64, choices=CATEGORIES)
+    image_url = models.ImageField(upload_to="images/", null=True)
     date_created = models.DateTimeField(default=datetime.datetime.now())
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctions")
 
     def __str__(self):
-        return f"{self.title}: {self.description} by {self.owner} on {self.date_created}"
+        return f"{self.title} by {self.owner} on {self.date_created}"
     
     
 # Bid model
