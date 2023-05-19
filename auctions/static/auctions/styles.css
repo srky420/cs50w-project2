@@ -1,16 +1,3 @@
-.success {
-    background-color: green;
-}
-
-.alert-error {
-    background-color: rgb(255, 78, 78);
-    color: white;
-}
-
-.info {
-    background-color: rgb(70, 184, 255);
-}
-
 .errorlist {
     color: red;
 }

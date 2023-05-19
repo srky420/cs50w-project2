@@ -11,10 +11,16 @@ from .forms import AuctionListingForm
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    # Get all auction listings
+    auctions = AuctionListing.objects.all()
+    
+    return render(request, "auctions/index.html", {
+        "auctions": auctions
+    })
 
 
 def login_view(request):
+    # POST
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -27,9 +33,9 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "auctions/login.html", {
-                "message": "Invalid username and/or password."
-            })
+            messages.error(request, "Invalid username or password!")
+            return render(request, "auctions/login.html")
+    # GET
     else:
         return render(request, "auctions/login.html")
 
@@ -40,6 +46,7 @@ def logout_view(request):
 
 
 def register(request):
+    # POST
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
@@ -48,20 +55,20 @@ def register(request):
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
-            return render(request, "auctions/register.html", {
-                "message": "Passwords must match."
-            })
+            messages.error(request, "Invalid username or password!")
+            return render(request, "auctions/register.html")
 
         # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
         except IntegrityError:
-            return render(request, "auctions/register.html", {
-                "message": "Username already taken."
-            })
+            messages.error(request, "Username already taken!")
+            return render(request, "auctions/register.html")
+        
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
+    # GET
     else:
         return render(request, "auctions/register.html")
 
@@ -71,23 +78,30 @@ def register(request):
 def create_listing(request):
     # POST 
     if request.method == "POST":
-        form = AuctionListingForm(request.POST)
+        form = AuctionListingForm(request.POST, request.FILES)
+        form.instance.owner = request.user
         
         # Check form
         if form.is_valid():
-            # Create AuctionListing obj
-            title = form.cleaned_data["title"]
-            description = form.cleaned_data["description"]
-            starting_bid = form.cleaned_data["starting_bid"]
-            category = form.cleaned_data["category"]
+            # Get form data
+            # title = form.cleaned_data["title"]
+            # description = form.cleaned_data["description"]
+            # starting_bid = form.cleaned_data["starting_bid"]
+            # category = form.cleaned_data["category"]
             
-            auction = AuctionListing(title=title, description=description, starting_bid=starting_bid, category=category, owner=request.user)
-
+            # Create AuctionListing obj
+            # auction = AuctionListing(title=title, description=description, starting_bid=starting_bid, category=category, owner=request.user)
+            
+            # instance = form.save(commit=False)
+            # instance.owner = request.user
+            # instance.save()
+            form.save()
+            
             messages.success(request, "Auction Listing Created!")
             return HttpResponseRedirect(reverse("index"))
         # Invalid form
         else:
-            messages.error(request, "Please provide a different title!")
+            messages.error(request, "Invalid form submission!")
             return render(request, "auctions/create-listing.html", {
                 "form": form
             })
@@ -97,4 +111,7 @@ def create_listing(request):
     return render(request, "auctions/create-listing.html", {
         "form": form
     })
+    
+    
+
     

@@ -8,7 +8,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class AuctionListingAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "description", "starting_bid", "category", "image_url", "date_created", "owner")
+    list_display = ("id", "title", "description", "starting_bid", "category", "image", "date_created", "owner")
 
 
 class BidAdmin(admin.ModelAdmin):

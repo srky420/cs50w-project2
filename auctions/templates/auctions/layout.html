@@ -23,20 +23,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-2">
-                    <li class="nav-item align-self-center">
-                        <form role="search">
-                            <div class="input-group">
-                                <input class="form-control form-control-sm" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-dark btn-sm" type="submit">Search</button>
-                            </div>
-                        </form>
-                    </li>
                     <li class="nav-item">
-                        <a class="btn btn-dark btn-sm" aria-current="page" href="{% url 'index' %}">Active Listings</a>
+                        <a class="nav-link" aria-current="page" href="{% url 'index' %}">Active Listings</a>
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="btn btn-dark btn-sm" aria-current="page" href="{% url 'create_listing' %}">Create Listing</a>
+                            <a class="nav-link" aria-current="page" href="{% url 'create_listing' %}">Create Listing</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -74,7 +66,7 @@
         <!-- Messages -->
         {% if messages %}
             {% for msg in messages %}
-                <div class="alert alert-{{ msg.tags }}">
+                <div class="alert alert-{% if msg.tags == 'error' %}danger{% else %}{{ msg.tags }}{% endif %}">
                     {{ msg }}
                 </div>
             {% endfor %}

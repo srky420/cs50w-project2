@@ -7,7 +7,7 @@ from .models import AuctionListing
 class AuctionListingForm(ModelForm):
     class Meta:
         model = AuctionListing
-        fields = ["title", "description", "starting_bid", "category", "image_url"]
+        fields = ["title", "description", "starting_bid", "category", "image"]
         widgets = {
             "description": Textarea()
         }
