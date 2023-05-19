@@ -15,4 +15,4 @@ class AuctionListingForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(AuctionListingForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
-            visible.field.widget.attrs["class"] = "form-control my-2 w-50"
+            visible.field.widget.attrs["class"] = "form-control my-2"
