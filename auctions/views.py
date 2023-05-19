@@ -4,8 +4,9 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib import messages
 
-from .models import User
+from .models import User, AuctionListing
 from .forms import AuctionListingForm
 
 
@@ -74,9 +75,23 @@ def create_listing(request):
         
         # Check form
         if form.is_valid():
-            print(form.cleaned_data)
-        
-        
+            # Create AuctionListing obj
+            title = form.cleaned_data["title"]
+            description = form.cleaned_data["description"]
+            starting_bid = form.cleaned_data["starting_bid"]
+            category = form.cleaned_data["category"]
+            
+            auction = AuctionListing(title=title, description=description, starting_bid=starting_bid, category=category, owner=request.user)
+
+            messages.success(request, "Auction Listing Created!")
+            return HttpResponseRedirect(reverse("index"))
+        # Invalid form
+        else:
+            messages.error(request, "Please provide a different title!")
+            return render(request, "auctions/create-listing.html", {
+                "form": form
+            })
+            
     # GET
     form = AuctionListingForm()
     return render(request, "auctions/create-listing.html", {

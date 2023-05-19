@@ -6,12 +6,12 @@
 
 {% block body %}
 
-    <h1>Create New Listing</h1>
+    <h2 class="my-3">Create New Listing</h2>
 
     <form action="{% url 'create_listing' %}" method="post">
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="Create Listing">
+        <button type="submit" class="btn btn-dark my-2">Create</button>
     </form>
 
 {% endblock %}

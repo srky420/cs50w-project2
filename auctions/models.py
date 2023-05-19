@@ -23,7 +23,7 @@ class User(AbstractUser):
 
 # AuctionList model
 class AuctionListing(models.Model):
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=64, unique=True)
     description = models.CharField(max_length=100)
     starting_bid = models.IntegerField()
     category = models.CharField(max_length=64, choices=CATEGORIES)

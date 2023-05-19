@@ -36,7 +36,7 @@
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="btn btn-dark btn-sm" aria-current="page" href="{% url 'index' %}">Create Listing</a>
+                            <a class="btn btn-dark btn-sm" aria-current="page" href="{% url 'create_listing' %}">Create Listing</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -71,6 +71,16 @@
 
     <!-- Body Block -->
     <div class="container my-3">
+        <!-- Messages -->
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="alert alert-{{ msg.tags }}">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        <!-- Messages End -->
+        
         {% block body %}
         {% endblock %}
     </div>
