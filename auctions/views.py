@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -65,10 +66,17 @@ def register(request):
 
 
 # Create listing
+@login_required
 def create_listing(request):
     # POST 
-    
-    
+    if request.method == "POST":
+        form = AuctionListingForm(request.POST)
+        
+        # Check form
+        if form.is_valid():
+            print(form.cleaned_data)
+        
+        
     # GET
     form = AuctionListingForm()
     return render(request, "auctions/create-listing.html", {
