@@ -5,9 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
-from django.db.models import Max
 
-from .models import User, AuctionListing
+from .models import User, AuctionListing, Watchlist
 from .forms import AuctionListingForm
 
 
@@ -110,6 +109,12 @@ def view_listing(request, listing_id):
     # Get listing obj
     listing = AuctionListing.objects.get(pk=listing_id)
     
+    # Get watchlist obj
+    if request.user.is_authenticated:
+        watchlist = Watchlist.objects.filter(user=request.user, auction=listing).first()
+    else:
+        watchlist = None
+    
     # Get bids
     bids = listing.bids.all()
     
@@ -119,9 +124,28 @@ def view_listing(request, listing_id):
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "current_bid": current_bid,
-        "bids": bids
+        "bids": bids,
+        "watchlist": watchlist
     })
         
+        
+# Add to watchlist
+@login_required
+def watchlist(request, listing_id):
+    # Check if already watchlisted
+    auction = AuctionListing.objects.get(pk=listing_id)
+    watchlist = Watchlist.objects.filter(user=request.user, auction=auction).first()
+    
+    # Delete existing obj
+    if watchlist:
+        watchlist.delete()
+    # Create new obj
+    else:
+        watchlist = Watchlist(user=request.user, auction=auction)
+        watchlist.save()
+    
+    return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
+
 
         
     

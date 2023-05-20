@@ -6,6 +6,12 @@
 
 {% block body %}
 
+    {% if watchlist %}
+        <a href="{% url 'watchlist' listing.id %}">Remove from Watchlist</a>
+    {% else %}
+        <a href="{% url 'watchlist' listing.id %}">Add to Watchlist</a>
+    {% endif %}
+
     <div class="card mb-3 border-0 w-100">
         <div class="row g-0">
             <!-- Card image -->
@@ -21,12 +27,16 @@
                     <hr>
                     <p class="card-text my-0"><small class="text-body-secondary">{{ listing.category }}</small></p>
                     <p class="card-text my-0"><small class="text-body-secondary">Created {{ listing.date_created }}</small></p>
+
+                    <!-- Show listing ownership -->
                     <p class="card-text my-0">
                         <small class="text-body-secondary">{% if listing.owner == request.user %}Your listing{% else %}By {{ listing.owner }}{% endif %}</small>
                     </p>
+
                     <hr>
+
                     <h4 class="card-text">
-                        <!-- Show current bid if exists, otherwise show starting bid -->
+                        <!-- Show bidding status -->
                         {% if current_bid %}
                             <span class="font-monospace">${{ current_bid.amount }}</span>
                         {% else %}
