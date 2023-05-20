@@ -109,7 +109,7 @@ def view_listing(request, listing_id):
     listing = AuctionListing.objects.get(pk=listing_id)
     
     # Get bids
-
+    
     
     return render(request, "auctions/listing.html", {
         "listing": listing

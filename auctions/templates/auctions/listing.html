@@ -8,14 +8,34 @@
 
     <div class="card mb-3 border-0 w-100">
         <div class="row g-0">
+            <!-- Card image -->
             <div class="col-md-6 border rounded-0 d-flex justify-content-center overflow-hidden" style="height: 30rem;">
                 <img src="{% if listing.image %}{{ listing.image.url }}{% else %}/media/images/no-image.jpeg{% endif %}" class="img-fluid" alt="listing-image">
             </div>
+            <!-- Card info -->
             <div class="col-md-6">
                 <div class="card-body py-0">
                     <h5 class="card-title">{{ listing.title }}</h5>
                     <p class="card-text">Description: {{ listing.description }}</p>
                     <p class="card-text"><small class="text-body-secondary">Created on: {{ listing.date_created }}</small></p>
+
+                    <h5 class="card-text">Current Price: <span class="font-monospace">${{ listing.starting_bid }}</span></h5>
+
+                    {% if request.user == listing.owner %}
+                        <!-- Close bidding -->
+                        <form action="">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-dark">Close Listing</button>
+                        </form>
+                    {% else %}
+                        <!-- Place bidding -->
+                        <form action="">
+                            {% csrf_token %}
+                            <input type="number" class="form-control form-control-sm mb-2">
+                            <button type="submit" class="btn btn-dark">Place Bid</button>
+                        </form>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
