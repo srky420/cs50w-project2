@@ -3,22 +3,17 @@ from django.db import models
 import datetime
 
 
-# Category choices
-CATEGORIES = [
-    ("CSA", "Clothing and Accessories"),
-    ("SPT", "Sports"),
-    ("HM", "Home"),
-    ("ELT", "Electronics"),
-    ("TY", "Toys"),
-    ("BMD", "Books and Media"),
-    ("HAB", "Health and Beauty"),
-    ("OTH", "Others")
-]
-
-
 # User model
 class User(AbstractUser):
     pass
+
+
+# Category model
+class Category(models.Model):
+    name = models.CharField(max_length=64)
+    
+    def __str__(self):
+        return self.name
 
 
 # AuctionList model
@@ -26,7 +21,7 @@ class AuctionListing(models.Model):
     title = models.CharField(max_length=64, unique=True)
     description = models.CharField(max_length=100)
     starting_bid = models.IntegerField()
-    category = models.CharField(max_length=64, choices=CATEGORIES)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="auctions")
     image = models.ImageField(upload_to="images/", null=True, blank=True)
     date_created = models.DateTimeField(default=datetime.datetime.now())
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctions")
@@ -55,4 +50,12 @@ class Comment(models.Model):
     
     def __str__(self):
         return f"{self.owner} commented: \"{self.text}\" on {self.auction}"
+    
 
+# Watchlist model
+class Watchlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watchlist")
+    auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="watchlisted_by") 
+
+    def __str__(self):
+        return f"{self.user} watchlisted {self.auction}"

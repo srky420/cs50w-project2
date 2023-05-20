@@ -5,7 +5,7 @@ Index
 {% endblock %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <h3>Active Listings</h3>
 
     <div class="row row-cols-lg-4 row-cols-md-3 cols-sm-1 g-4">
         {% for auction in auctions %}
@@ -18,8 +18,8 @@ Index
                 <div class="card-body p-0 my-2">
                     <a href="{% url 'view_listing' auction.id %}" class="card-title my-1">{{ auction.title }}</a>
                     <h5 class="card-text my-1">List Price: <span class="font-monospace">${{ auction.starting_bid }}</span></h5>
-                    <p class="card-text my-1 text-overflow-hidden">Description: {{ auction.description }}</p>
-                    <p class="card-text text-muted my-1">{{ auction.date_created }} by {{ auction.owner }}</p>
+                    <p class="card-text my-1 text-muted text-overflow-hidden">{{ auction.description }}</p>
+                    <p class="card-text text-muted my-1">{{ auction.date_created }}</p>
                 </div>
             </div>
         </div>

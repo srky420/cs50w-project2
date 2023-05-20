@@ -13,9 +13,28 @@
 <body>
 
     <!-- Nav Start -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom py-2">
+    <nav class="navbar bg-body-tertiary">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'index' %}"><h2>Commerce</h2></a>
+            <div class="d-flex w-100 justify-content-between px-2">
+            {% if user.is_authenticated %}
+                Signed in as: {{ request.user }}
+                <a  href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                Not signed in.
+                <div class="nav-item">
+                    <a class="px-2" href="{% url 'login' %}">Login</a>
+                    <a href="{% url 'register' %}">Signup</a>
+                </div>
+            {% endif %}
+            </div>
+        </div>
+    </nav>
+    <hr class="my-0">
+    <nav class="navbar navbar-expand-lg bg-light-subtle mb-5">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <h2>Commerce</h2>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -26,33 +45,15 @@
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{% url 'index' %}">Active Listings</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#">Categories</a>
+                    </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="#">Watchlist</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{% url 'create_listing' %}">Create Listing</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Signed in as: {{ request.user }}
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                            </ul>
-                        </li>
-                    {% else %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Not signed in
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
-                                <li><a class="dropdown-item" href="{% url 'register' %}">Signup</a></li>
-                            </ul>
                         </li>
                     {% endif %}
                 </ul>
@@ -65,14 +66,14 @@
     <div class="container my-3">
         <!-- Messages -->
         {% if messages %}
-            {% for msg in messages %}
-                <div class="alert alert-{% if msg.tags == 'error' %}danger{% else %}{{ msg.tags }}{% endif %}">
-                    {{ msg }}
-                </div>
-            {% endfor %}
+        {% for msg in messages %}
+        <div class="alert alert-{% if msg.tags == 'error' %}danger{% else %}{{ msg.tags }}{% endif %}">
+            {{ msg }}
+        </div>
+        {% endfor %}
         {% endif %}
         <!-- Messages End -->
-        
+
         {% block body %}
         {% endblock %}
     </div>

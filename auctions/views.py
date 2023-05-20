@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
+from django.db.models import Max
 
 from .models import User, AuctionListing
 from .forms import AuctionListingForm
@@ -42,6 +43,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+    messages.success(request, "Logged out!")
     return HttpResponseRedirect(reverse("index"))
 
 
@@ -109,11 +111,20 @@ def view_listing(request, listing_id):
     listing = AuctionListing.objects.get(pk=listing_id)
     
     # Get bids
+    bids = listing.bids.all()
     
+    # Check if auction has bids
+    current_bid = bids.order_by("-amount").first()
     
     return render(request, "auctions/listing.html", {
-        "listing": listing
+        "listing": listing,
+        "current_bid": current_bid,
+        "bids": bids
     })
+        
+
+        
+    
     
 
     

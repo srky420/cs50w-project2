@@ -12,15 +12,32 @@
             <div class="col-md-6 border rounded-0 d-flex justify-content-center overflow-hidden" style="height: 30rem;">
                 <img src="{% if listing.image %}{{ listing.image.url }}{% else %}/media/images/no-image.jpeg{% endif %}" class="img-fluid" alt="listing-image">
             </div>
+            
             <!-- Card info -->
             <div class="col-md-6">
                 <div class="card-body py-0">
                     <h5 class="card-title">{{ listing.title }}</h5>
-                    <p class="card-text">Description: {{ listing.description }}</p>
-                    <p class="card-text"><small class="text-body-secondary">Created on: {{ listing.date_created }}</small></p>
+                    <p class="card-text my-0">{{ listing.description }}</p>
+                    <hr>
+                    <p class="card-text my-0"><small class="text-body-secondary">{{ listing.category }}</small></p>
+                    <p class="card-text my-0"><small class="text-body-secondary">Created {{ listing.date_created }}</small></p>
+                    <p class="card-text my-0">
+                        <small class="text-body-secondary">{% if listing.owner == request.user %}Your listing{% else %}By {{ listing.owner }}{% endif %}</small>
+                    </p>
+                    <hr>
+                    <h4 class="card-text">
+                        <!-- Show current bid if exists, otherwise show starting bid -->
+                        {% if current_bid %}
+                            <span class="font-monospace">${{ current_bid.amount }}</span>
+                        {% else %}
+                            <span class="font-monospace">${{ listing.starting_bid }}</span>
+                        {% endif %}
+                    </h4>
 
-                    <h5 class="card-text">Current Price: <span class="font-monospace">${{ listing.starting_bid }}</span></h5>
-
+                    <p class="card-text text-muted mb-1">
+                        {{ bids.count }} bid(s) so far. {% if current_bid.bidder == request.user %} Your bid is current bid {% endif %}
+                    </p>
+                    
                     {% if request.user == listing.owner %}
                         <!-- Close bidding -->
                         <form action="">
@@ -29,7 +46,7 @@
                         </form>
                     {% else %}
                         <!-- Place bidding -->
-                        <form action="">
+                        <form action="" >
                             {% csrf_token %}
                             <input type="number" class="form-control form-control-sm mb-2">
                             <button type="submit" class="btn btn-dark">Place Bid</button>
@@ -38,6 +55,7 @@
 
                 </div>
             </div>
+            <!-- Card info end -->
         </div>
     </div>
 
