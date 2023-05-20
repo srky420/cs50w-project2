@@ -1,0 +1,24 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+{{ listing.title }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="card mb-3 border-0 w-100">
+        <div class="row g-0">
+            <div class="col-md-6 border rounded-0 d-flex justify-content-center overflow-hidden" style="height: 30rem;">
+                <img src="{% if listing.image %}{{ listing.image.url }}{% else %}/media/images/no-image.jpeg{% endif %}" class="img-fluid" alt="listing-image">
+            </div>
+            <div class="col-md-6">
+                <div class="card-body py-0">
+                    <h5 class="card-title">{{ listing.title }}</h5>
+                    <p class="card-text">Description: {{ listing.description }}</p>
+                    <p class="card-text"><small class="text-body-secondary">Created on: {{ listing.date_created }}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -79,23 +79,13 @@ def create_listing(request):
     # POST 
     if request.method == "POST":
         form = AuctionListingForm(request.POST, request.FILES)
-        form.instance.owner = request.user
         
         # Check form
         if form.is_valid():
             # Get form data
-            # title = form.cleaned_data["title"]
-            # description = form.cleaned_data["description"]
-            # starting_bid = form.cleaned_data["starting_bid"]
-            # category = form.cleaned_data["category"]
-            
-            # Create AuctionListing obj
-            # auction = AuctionListing(title=title, description=description, starting_bid=starting_bid, category=category, owner=request.user)
-            
-            # instance = form.save(commit=False)
-            # instance.owner = request.user
-            # instance.save()
-            form.save()
+            instance = form.save(commit=False)
+            instance.owner = request.user
+            instance.save()
             
             messages.success(request, "Auction Listing Created!")
             return HttpResponseRedirect(reverse("index"))
@@ -112,6 +102,18 @@ def create_listing(request):
         "form": form
     })
     
+    
+# View listing
+def view_listing(request, listing_id):
+    # Get listing obj
+    listing = AuctionListing.objects.get(pk=listing_id)
+    
+    # Get bids
+
+    
+    return render(request, "auctions/listing.html", {
+        "listing": listing
+    })
     
 
     

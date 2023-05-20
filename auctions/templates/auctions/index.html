@@ -7,14 +7,19 @@ Index
 {% block body %}
     <h2>Active Listings</h2>
 
-    <div class="row row-cols-1 row-cols-md-2 g-4">
+    <div class="row row-cols-lg-4 row-cols-md-3 cols-sm-1 g-4">
         {% for auction in auctions %}
         <div class="col">
-            <div class="card">
-                <img src="{% if auction.image_url %}{{ auction.image_url.url }}{% endif %}" class="card-img-top" alt="auction-image">
-                <div class="card-body">
-                    <h5 class="card-title">{{ auction.title }}</h5>
-                    <p class="card-text">{{ auction.description }}</p>
+            <div class="card h-100 border-0 my-3">
+                <div class="card-img-top shadow-sm border rounded-0 d-flex overflow-hidden" style="height: 18rem;">
+                    <img src="{% if auction.image %}{{ auction.image.url }}{% else %}/media/images/no-image.jpeg{% endif %}"
+                     alt="auction-image" class="img-fluid align-self-center">
+                </div>
+                <div class="card-body p-0 my-2">
+                    <a href="{% url 'view_listing' auction.id %}" class="card-title my-1">{{ auction.title }}</a>
+                    <h5 class="card-text my-1">List Price: <span class="font-monospace">${{ auction.starting_bid }}</span></h5>
+                    <p class="card-text my-1 text-overflow-hidden">Description: {{ auction.description }}</p>
+                    <p class="card-text text-muted my-1">{{ auction.date_created }} by {{ auction.owner }}</p>
                 </div>
             </div>
         </div>

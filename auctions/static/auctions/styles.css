@@ -1,3 +1,9 @@
 .errorlist {
     color: red;
 }
+
+.text-overflow-hidden {
+    text-overflow: ellipsis; 
+    overflow: hidden;
+    white-space: nowrap;
+}
