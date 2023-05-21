@@ -6,8 +6,8 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 
-from .models import User, AuctionListing, Watchlist
-from .forms import AuctionListingForm
+from .models import User, AuctionListing, Watchlist, Bid
+from .forms import AuctionListingForm, PlaceBidForm
 
 
 def index(request):
@@ -121,11 +121,15 @@ def view_listing(request, listing_id):
     # Check if auction has bids
     current_bid = bids.order_by("-amount").first()
     
+    # Place bid form
+    form = PlaceBidForm()
+    
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "current_bid": current_bid,
         "bids": bids,
-        "watchlist": watchlist
+        "watchlist": watchlist,
+        "form": form
     })
         
         
@@ -147,6 +151,43 @@ def watchlist(request, listing_id):
     return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
 
 
+# Place bid
+@login_required   
+def bid(request, listing_id):
+    # POST
+    if request.method == "POST":
+        form = PlaceBidForm(request.POST)
+        
+        if form.is_valid():
+            amount = form.cleaned_data["amount"]
+            
+            # Checks
+            auction = AuctionListing.objects.get(pk=listing_id)
+            current_bid = auction.bids.all().order_by("-amount").first()
+            
+            # Check if bid exists
+            if current_bid:
+                if current_bid.bidder == request.user:
+                    messages.error(request, "Your bid is the current bid!")
+                    return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
+                
+                current_bid = current_bid.amount
+            else:
+                current_bid = auction.starting_bid
+            
+            # If this bid less than current bid
+            if amount <= current_bid:
+                messages.error(request, "Invalid bid amount!")
+                return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
+            
+            bid = Bid(amount=amount, bidder=request.user, auction=auction)
+            bid.save()
+            
+            messages.success(request, "Bid placed!")
+            return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
+        else:
+            messages.error(request, "Error placing bid!")
+            return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
         
     
     

@@ -30,36 +30,38 @@
 
                     <!-- Show listing ownership -->
                     <p class="card-text my-0">
-                        <small class="text-body-secondary">{% if listing.owner == request.user %}Your listing{% else %}By {{ listing.owner }}{% endif %}</small>
+                        <small class="text-body-secondary">{% if listing.owner == request.user %}Your listing{% else %}Owner {{ listing.owner }}{% endif %}</small>
                     </p>
 
                     <hr>
 
-                    <h4 class="card-text">
+                    <p class="card-text">
                         <!-- Show bidding status -->
                         {% if current_bid %}
-                            <span class="font-monospace">${{ current_bid.amount }}</span>
+                            <span class="h4 font-monospace">${{ current_bid.amount }}</span> <small class="text-muted mx-2">bid by {{ current_bid.bidder }}</small>
                         {% else %}
-                            <span class="font-monospace">${{ listing.starting_bid }}</span>
+                            <span class="h4 font-monospace">${{ listing.starting_bid }}</span>
                         {% endif %}
-                    </h4>
+                    </p>
 
                     <p class="card-text text-muted mb-1">
-                        {{ bids.count }} bid(s) so far. {% if current_bid.bidder == request.user %} Your bid is current bid {% endif %}
+                        {{ bids.count }} bid(s) so far. {% if current_bid.bidder == request.user %} Your bid is the current bid. {% endif %} 
+                        <a href="{% url 'biddings' listing.id %}" class="card-link text-muted">See all</a>
                     </p>
+                   
                     
                     {% if request.user == listing.owner %}
                         <!-- Close bidding -->
-                        <form action="">
+                        <form action="" class="my-2">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-dark">Close Listing</button>
+                            <button type="submit" class="btn btn-primary rounded-1">Close Listing</button>
                         </form>
                     {% else %}
                         <!-- Place bidding -->
-                        <form action="" >
+                        <form action="{% url 'bid' listing.id %}" method="post" class="my-2">
                             {% csrf_token %}
-                            <input type="number" class="form-control form-control-sm mb-2">
-                            <button type="submit" class="btn btn-dark">Place Bid</button>
+                            {{ form }}
+                            <button type="submit" class="btn btn-primary my-1 rounded-1">Place Bid</button>
                         </form>
                     {% endif %}
 
