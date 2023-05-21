@@ -219,6 +219,19 @@ def view_watchlist(request):
     # Get user's watchlist
     watchlist = Watchlist.objects.filter(user=request.user).all()
     
+    # Create auctions list
+    auctions = []
+    for w in watchlist:
+        auctions.append(w.auction)
+    
+    # Create bids list
+    bids = []
+    for auction in auctions:
+        bids.append(auction.bids.all().order_by("-amount").first())
+    
+    # Zip both lists
+    zipped_list = zip(auctions, bids)
+    
     return render(request, "auctions/watchlist.html", {
-        "watchlist": watchlist
+        "zipped_list": zipped_list
     })

@@ -8,21 +8,38 @@ Watchlist
     
     <h3 class="my-3">Watchlist</h3>
 
-    {% for w in watchlist %}
-    <div class="card mb-3 position-relative mx-auto overflow-hidden rounded-0 w-75">
-        <a href="{% url 'watchlist' w.auction.id %}" class="btn btn-close btn-sm position-absolute" style="right: 0;"></a>
+    {% for auction, current_bid in zipped_list %}
+    <div class="card mb-3 position-relative mx-auto overflow-hidden rounded-0 w-75 shadow-sm">
+        <a href="{% url 'watchlist' auction.id %}" class="btn btn-close btn-sm position-absolute" style="right: 0;"></a>
         <div class="row g-0">
+
+            <!-- Card img -->
             <div class="col-md-4 w-auto border-end" style="height: 10rem;">
-                <img src="{{ w.auction.image.url }}" class="img-fluid" alt="listing-img" width="180">
+                <img src="{{ auction.image.url }}" class="img-fluid" alt="listing-img" width="180">
             </div>
+            <!-- Card img end -->
+
+            <!-- Card body -->
             <div class="col-md-8">
-                <div class="card-body">
-                    <a href="{% url 'view_listing' w.auction.id %}" class="card-link">{{ w.auction.title }}</a>
-                    <p class="card-text text-overflow-hidden">{{ w.auction.description }}</p>
-                    <h5 class="card-text">List price: <span class="font-monospace">${{ w.auction.starting_bid }}</span></h5>
-                    <p class="card-text"><small class="text-body-secondary">Created {{ w.auction.date_created }}</small></p>
+                <div class="card-body py-1">
+
+                    <!-- Card info -->
+                    <a href="{% url 'view_listing' auction.id %}" class="card-link">{{ auction.title }}</a>
+                    <p class="card-text text-overflow-hidden">{{ auction.description }}</p>
+
+                    <!-- Bid status -->
+                    <p class="card-text">
+                            {% if current_bid %}
+                                <span class="h4 font-monospace">${{ current_bid.amount }}</span> <small class="text-muted mx-2">Current bid by {{ current_bid.bidder }}</small>
+                            {% else %}
+                                <span class="h4 font-monospace">${{ auction.starting_bid }}</span> <small class="text-muted mx-2">No bids yet.</small>
+                            {% endif %}
+                        </span>
+                    </p>
+                    <p class="card-text"><small class="text-body-secondary">Created {{ auction.date_created }}</small></p>
                 </div>
             </div>
+            <!-- Card body end -->
         </div>
     </div>
     {% endfor %}

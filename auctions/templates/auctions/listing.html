@@ -9,10 +9,14 @@
     <div class="card mb-3 border-0 w-100 position-relative">
 
         <!-- Watchlist -->
-        {% if watchlist %}
-            <a class="btn btn-danger btn-sm rounded-0 position-absolute" href="{% url 'watchlist' listing.id %}"><i class="fa fa-close"></i> Watchlist</a>
+        {% if listing.owner == request.user %}
+            <button class="btn btn-primary btn-sm disabled position-absolute rounded-0">Your Listing</button>
         {% else %}
-            <a class="btn btn-success btn-sm rounded-0 position-absolute" href="{% url 'watchlist' listing.id %}"><i class="fa fa-plus"></i> Watchlist</a>
+            {% if watchlist %}
+                <a class="btn btn-danger btn-sm rounded-0 position-absolute" href="{% url 'watchlist' listing.id %}"><i class="fa fa-close"></i> Watchlist</a>
+            {% else %}
+                <a class="btn btn-success btn-sm rounded-0 position-absolute" href="{% url 'watchlist' listing.id %}"><i class="fa fa-plus"></i> Watchlist</a>
+            {% endif %}
         {% endif %}
 
         <div class="row g-0">

@@ -37,8 +37,8 @@
 
                     <hr>
 
+                    <!-- Show bidding status -->
                     <p class="card-text">
-                        <!-- Show bidding status -->
                         {% if winner_bid %}
                             <span class="h4 font-monospace">${{ winner_bid.amount }}</span> <small class="text-muted mx-2">winner bid.</small>
                         {% else %}
@@ -57,6 +57,9 @@
                         {% if winner_bid.bidder == request.user %} 
                             <h4 class="card-text">You have won this auction.</h4>
                             <p class="card-text">Contact owner at {{ listing.owner.email }}</p>
+                        {% elif listing.owner == request.user %}
+                            <h4 class="card-text">User: {{ winner_bid.bidder }} has won this auction.</h4>
+                            <p class="card-text">Contact winner at {{ winner_bid.bidder.email }}</p>
                         {% else %}
                             <h4 class="card-text">User: {{ winner_bid.bidder }} has won this auction.</h4>
                         {% endif %}
