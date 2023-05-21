@@ -6,7 +6,7 @@
 
 {% block body %}
 
-    <button class="btn btn-danger rounded-1 disabled">Closed</button>
+    <button class="btn btn-danger btn-sm rounded-1 disabled">Closed</button>
 
     <div class="card mb-3 border-0 w-100">
         <div class="row g-0">
@@ -28,7 +28,7 @@
                     <p class="card-text my-0">
                         <small class="text-body-secondary">
                             {% if listing.owner == request.user %}
-                                Your listing.(closed)
+                                Your listing.
                             {% else %}
                                 Owner {{ listing.owner }}
                             {% endif %}
@@ -40,19 +40,25 @@
                     <p class="card-text">
                         <!-- Show bidding status -->
                         {% if winner_bid %}
-                            <span class="h4 font-monospace">${{ winner_bid.amount }}</span> <small class="text-muted mx-2">won by {{ winner_bid.bidder }}</small>
+                            <span class="h4 font-monospace">${{ winner_bid.amount }}</span> <small class="text-muted mx-2">winner bid.</small>
                         {% else %}
-                            <span class="h4 font-monospace">${{ listing.starting_bid }}</span>
+                            <span class="h4 font-monospace">${{ listing.starting_bid }}</span> <small class="text-muted mx-2">no winner.</small>
                         {% endif %}
                     </p>
-                    <!-- Current bid -->
+                    <!-- Total bids -->
                     <p class="card-text text-muted mb-1">
                         {{ bids.count }} bid(s).
                         <a href="#" class="card-link text-muted">See all</a>
                     </p>
-                    
-                    {% if winner_bid.bidder == request.user %} 
-                        <h4 class="card-text">You have won this auction.</h4>
+
+                    <!-- Show winner -->
+                    {% if winner_bid %}
+                        {% if winner_bid.bidder == request.user %} 
+                            <h4 class="card-text">You have won this auction.</h4>
+                            <p class="card-text">Contact owner at {{ listing.owner.email }}</p>
+                        {% else %}
+                            <h4 class="card-text">User: {{ winner_bid.bidder }} has won this auction.</h4>
+                        {% endif %}
                     {% endif %}
                    
                 </div>
