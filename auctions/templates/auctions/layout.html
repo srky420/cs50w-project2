@@ -6,11 +6,13 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Auctions{% endblock %}</title>
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+
+    <title>{% block title %}Auctions{% endblock %}</title>
 </head>
 
 <body>
@@ -53,7 +55,7 @@
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">Watchlist</a>
+                            <a class="nav-link" aria-current="page" href="{% url 'view_watchlist' %}">Watchlist</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{% url 'create_listing' %}">Create Listing</a>
@@ -71,7 +73,7 @@
         {% if messages %}
         {% for msg in messages %}
         <div class="alert alert-{% if msg.tags == 'error' %}danger{% else %}{{ msg.tags }}{% endif %} text-center border-0 rounded-0">
-            {{ msg }}
+            <i class="fa fa-exclamation mx-2"></i> {{ msg }}
         </div>
         {% endfor %}
         {% endif %}

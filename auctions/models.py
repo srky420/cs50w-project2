@@ -22,7 +22,7 @@ class AuctionListing(models.Model):
     description = models.CharField(max_length=100)
     starting_bid = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="auctions")
-    image = models.ImageField(upload_to="images/", null=True, blank=True)
+    image = models.ImageField(upload_to="images/", default="images/default.jpg")
     date_created = models.DateTimeField(default=datetime.datetime.now())
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctions")
     is_closed = models.BooleanField(default=False)

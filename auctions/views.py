@@ -33,7 +33,7 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
-            messages.error(request, "Invalid username or password!")
+            messages.error(request, "Invalid username or password.")
             return render(request, "auctions/login.html")
     # GET
     else:
@@ -42,7 +42,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    messages.success(request, "Logged out!")
+    messages.success(request, "Logged out.")
     return HttpResponseRedirect(reverse("index"))
 
 
@@ -56,7 +56,7 @@ def register(request):
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
-            messages.error(request, "Invalid username or password!")
+            messages.error(request, "Invalid username or password.")
             return render(request, "auctions/register.html")
 
         # Attempt to create new user
@@ -64,10 +64,11 @@ def register(request):
             user = User.objects.create_user(username, email, password)
             user.save()
         except IntegrityError:
-            messages.error(request, "Username already taken!")
+            messages.error(request, "Username already taken.")
             return render(request, "auctions/register.html")
         
         login(request, user)
+        messages.success(request, "Account created.")
         return HttpResponseRedirect(reverse("index"))
     # GET
     else:
@@ -88,11 +89,11 @@ def create_listing(request):
             instance.owner = request.user
             instance.save()
             
-            messages.success(request, "Auction Listing Created!")
+            messages.success(request, "Auction Listing Created.")
             return HttpResponseRedirect(reverse("index"))
         # Invalid form
         else:
-            messages.error(request, "Invalid form submission!")
+            messages.error(request, "Invalid form submission.")
             return render(request, "auctions/create-listing.html", {
                 "form": form
             })
@@ -151,10 +152,12 @@ def watchlist(request, listing_id):
     # Delete existing obj
     if watchlist:
         watchlist.delete()
+        messages.error(request, "Removed from watchlist.")
     # Create new obj
     else:
         watchlist = Watchlist(user=request.user, auction=auction)
         watchlist.save()
+        messages.success(request, "Added to watchlist.")
     
     return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
 
@@ -176,7 +179,7 @@ def bid(request, listing_id):
             # Check if bid exists
             if current_bid:
                 if current_bid.bidder == request.user:
-                    messages.error(request, "Your bid is the current bid!")
+                    messages.error(request, "Your bid is the current bid.")
                     return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
                 
                 current_bid = current_bid.amount
@@ -185,20 +188,21 @@ def bid(request, listing_id):
             
             # If this bid less than current bid
             if amount <= current_bid:
-                messages.error(request, "Invalid bid amount!")
+                messages.error(request, "Invalid bid amount.")
                 return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
             
             bid = Bid(amount=amount, bidder=request.user, auction=auction)
             bid.save()
             
-            messages.success(request, "Bid placed!")
+            messages.success(request, "Bid placed.")
             return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
         else:
-            messages.error(request, "Error placing bid!")
+            messages.error(request, "Error placing bid.")
             return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
         
 
 # Close listing
+@login_required
 def close_listing(request, listing_id):
     # POST
     if request.method == "POST":
@@ -209,5 +213,12 @@ def close_listing(request, listing_id):
         return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
             
        
-        
+# View watchlist
+@login_required
+def view_watchlist(request):
+    # Get user's watchlist
+    watchlist = Watchlist.objects.filter(user=request.user).all()
+    
+    print(watchlist.auction.all())
 
+    pass

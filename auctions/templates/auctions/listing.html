@@ -6,17 +6,19 @@
 
 {% block body %}
 
-    {% if watchlist %}
-        <a href="{% url 'watchlist' listing.id %}">Remove from Watchlist</a>
-    {% else %}
-        <a href="{% url 'watchlist' listing.id %}">Add to Watchlist</a>
-    {% endif %}
+    <div class="card mb-3 border-0 w-100 position-relative">
 
-    <div class="card mb-3 border-0 w-100">
+        <!-- Watchlist -->
+        {% if watchlist %}
+            <a class="btn btn-danger btn-sm rounded-0 position-absolute" href="{% url 'watchlist' listing.id %}"><i class="fa fa-close"></i> Watchlist</a>
+        {% else %}
+            <a class="btn btn-success btn-sm rounded-0 position-absolute" href="{% url 'watchlist' listing.id %}"><i class="fa fa-plus"></i> Watchlist</a>
+        {% endif %}
+
         <div class="row g-0">
             <!-- Card image -->
             <div class="col-md-6 border rounded-0 d-flex justify-content-center overflow-hidden" style="height: 30rem;">
-                <img src="{% if listing.image %}{{ listing.image.url }}{% else %}/media/images/no-image.jpeg{% endif %}" class="img-fluid" alt="listing-image">
+                <img src="{{ listing.image.url }}" class="img-fluid" alt="listing-image">
             </div>
             
             <!-- Card info -->
@@ -35,15 +37,16 @@
 
                     <hr>
 
+                    <!-- Show bidding status -->
                     <p class="card-text">
-                        <!-- Show bidding status -->
                         {% if current_bid %}
                             <span class="h4 font-monospace">${{ current_bid.amount }}</span> <small class="text-muted mx-2">current bid by {{ current_bid.bidder }}</small>
                         {% else %}
                             <span class="h4 font-monospace">${{ listing.starting_bid }}</span>
                         {% endif %}
                     </p>
-                    <!-- Current bid -->
+
+                    <!-- Total bids -->
                     <p class="card-text text-muted mb-1">
                         {{ bids.count }} bid(s) so far. {% if current_bid.bidder == request.user %} Your bid is the current bid. {% endif %} 
                         <a href="#" class="card-link text-muted">See all</a>
