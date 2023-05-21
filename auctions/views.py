@@ -218,6 +218,7 @@ def close_listing(request, listing_id):
 def view_watchlist(request):
     # Get user's watchlist
     watchlist = Watchlist.objects.filter(user=request.user).all()
+    
     return render(request, "auctions/watchlist.html", {
         "watchlist": watchlist
     })
