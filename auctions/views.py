@@ -109,17 +109,25 @@ def view_listing(request, listing_id):
     # Get listing obj
     listing = AuctionListing.objects.get(pk=listing_id)
     
-    # Get watchlist obj
-    if request.user.is_authenticated:
-        watchlist = Watchlist.objects.filter(user=request.user, auction=listing).first()
-    else:
-        watchlist = None
-    
     # Get bids
     bids = listing.bids.all()
     
     # Check if auction has bids
     current_bid = bids.order_by("-amount").first()
+    
+    # Check if listing closed
+    if listing.is_closed:
+        return render(request, "auctions/closed-listing.html", {
+            "listing": listing,
+            "bids": bids,
+            "winner_bid": current_bid
+        })
+    
+    # Get watchlist obj
+    if request.user.is_authenticated:
+        watchlist = Watchlist.objects.filter(user=request.user, auction=listing).first()
+    else:
+        watchlist = None
     
     # Place bid form
     form = PlaceBidForm()
@@ -189,7 +197,17 @@ def bid(request, listing_id):
             messages.error(request, "Error placing bid!")
             return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
         
-    
-    
 
-    
+# Close listing
+def close_listing(request, listing_id):
+    # POST
+    if request.method == "POST":
+        auction = AuctionListing.objects.get(pk=listing_id)
+        auction.is_closed = True
+        auction.save()
+        
+        return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
+            
+       
+        
+

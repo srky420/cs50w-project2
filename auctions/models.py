@@ -25,6 +25,7 @@ class AuctionListing(models.Model):
     image = models.ImageField(upload_to="images/", null=True, blank=True)
     date_created = models.DateTimeField(default=datetime.datetime.now())
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctions")
+    is_closed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.title} by {self.owner} on {self.date_created}"
@@ -38,7 +39,7 @@ class Bid(models.Model):
     auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="bids")
     
     def __str__(self):
-        return f"{self.bidder} placed a bid of: {self.amount} for {self.auction} on {self.date_created}"
+        return f"{self.bidder} placed a bid of: {self.amount} for {self.auction.title} on {self.date_created}"
     
 
 # Comment model
@@ -49,7 +50,7 @@ class Comment(models.Model):
     date_created = models.DateTimeField(default=datetime.datetime.now())
     
     def __str__(self):
-        return f"{self.owner} commented: \"{self.text}\" on {self.auction}"
+        return f"{self.owner} commented: \"{self.text}\" on {self.auction.title}"
     
 
 # Watchlist model
@@ -58,4 +59,4 @@ class Watchlist(models.Model):
     auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="watchlisted_by") 
 
     def __str__(self):
-        return f"{self.user} watchlisted {self.auction}"
+        return f"{self.user} watchlisted {self.auction.title}"

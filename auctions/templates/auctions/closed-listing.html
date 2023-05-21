@@ -6,11 +6,7 @@
 
 {% block body %}
 
-    {% if watchlist %}
-        <a href="{% url 'watchlist' listing.id %}">Remove from Watchlist</a>
-    {% else %}
-        <a href="{% url 'watchlist' listing.id %}">Add to Watchlist</a>
-    {% endif %}
+    <button class="btn btn-danger rounded-1 disabled">Closed</button>
 
     <div class="card mb-3 border-0 w-100">
         <div class="row g-0">
@@ -30,39 +26,35 @@
 
                     <!-- Show listing ownership -->
                     <p class="card-text my-0">
-                        <small class="text-body-secondary">{% if listing.owner == request.user %}Your listing{% else %}Owner {{ listing.owner }}{% endif %}</small>
+                        <small class="text-body-secondary">
+                            {% if listing.owner == request.user %}
+                                Your listing.(closed)
+                            {% else %}
+                                Owner {{ listing.owner }}
+                            {% endif %}
+                        </small>
                     </p>
 
                     <hr>
 
                     <p class="card-text">
                         <!-- Show bidding status -->
-                        {% if current_bid %}
-                            <span class="h4 font-monospace">${{ current_bid.amount }}</span> <small class="text-muted mx-2">current bid by {{ current_bid.bidder }}</small>
+                        {% if winner_bid %}
+                            <span class="h4 font-monospace">${{ winner_bid.amount }}</span> <small class="text-muted mx-2">won by {{ winner_bid.bidder }}</small>
                         {% else %}
                             <span class="h4 font-monospace">${{ listing.starting_bid }}</span>
                         {% endif %}
                     </p>
                     <!-- Current bid -->
                     <p class="card-text text-muted mb-1">
-                        {{ bids.count }} bid(s) so far. {% if current_bid.bidder == request.user %} Your bid is the current bid. {% endif %} 
+                        {{ bids.count }} bid(s).
                         <a href="#" class="card-link text-muted">See all</a>
                     </p>
-                   
-                    {% if request.user == listing.owner %}
-                        <!-- Close bidding -->
-                        <form action="{% url 'close_listing' listing.id %}" method="post" class="my-2">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary rounded-1">Close Listing</button>
-                        </form>
-                    {% else %}
-                        <!-- Place bidding -->
-                        <form action="{% url 'bid' listing.id %}" method="post" class="my-2">
-                            {% csrf_token %}
-                            {{ form }}
-                            <button type="submit" class="btn btn-primary my-1 rounded-1">Place Bid</button>
-                        </form>
+                    
+                    {% if winner_bid.bidder == request.user %} 
+                        <h4 class="card-text">You have won this auction.</h4>
                     {% endif %}
+                   
                 </div>
             </div>
             <!-- Card info end -->
