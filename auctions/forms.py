@@ -1,6 +1,6 @@
-from django.forms import ModelForm, Textarea, NumberInput
+from django.forms import ModelForm, Textarea, NumberInput, TextInput
 
-from .models import AuctionListing, Bid
+from .models import AuctionListing, Bid, Comment
 
 
 # AuctionListing form
@@ -25,6 +25,19 @@ class PlaceBidForm(ModelForm):
         fields = ["amount"]
         widgets = {
             "amount": NumberInput(attrs={"class": "form-control form-control-sm w-50 my-1 rounded-0 border-dark-subtle"})
+        }
+        
+
+# Comment form
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["text"]
+        labels = {
+            "text": ""
+        }
+        widgets = {
+            "text": TextInput(attrs={"class": "form-control form-control-sm border-dark-subtle rounded-0 my-1 w-50", "placeholder": "Add a comment"})
         }
             
             

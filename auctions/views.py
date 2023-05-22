@@ -6,16 +6,25 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 
-from .models import User, AuctionListing, Watchlist, Bid
-from .forms import AuctionListingForm, PlaceBidForm
+from .models import User, AuctionListing, Watchlist, Bid, Comment
+from .forms import AuctionListingForm, PlaceBidForm, CommentForm
 
 
 def index(request):
     # Get all auction listings
     auctions = AuctionListing.objects.all()
     
+    # Get all bids
+    bids = []
+    for auction in auctions:
+        bids.append(auction.bids.all().order_by("-amount").first())
+        
+
+    zipped_list = zip(auctions, bids)
+    
     return render(request, "auctions/index.html", {
-        "auctions": auctions
+        "auctions": auctions,
+        "zipped_list": zipped_list
     })
 
 
@@ -116,12 +125,16 @@ def view_listing(request, listing_id):
     # Check if auction has bids
     current_bid = bids.order_by("-amount").first()
     
+    # Get comments
+    comments = listing.comments.all()
+    
     # Check if listing closed
     if listing.is_closed:
         return render(request, "auctions/closed-listing.html", {
             "listing": listing,
             "bids": bids,
-            "winner_bid": current_bid
+            "winner_bid": current_bid,
+            "commetns": comments
         })
     
     # Get watchlist obj
@@ -130,15 +143,18 @@ def view_listing(request, listing_id):
     else:
         watchlist = None
     
-    # Place bid form
-    form = PlaceBidForm()
+    # forms
+    placebid_form = PlaceBidForm()
+    comment_form = CommentForm()
     
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "current_bid": current_bid,
         "bids": bids,
         "watchlist": watchlist,
-        "form": form
+        "placebid_form": placebid_form,
+        "comment_form": comment_form,
+        "comments": comments
     })
         
         
@@ -235,3 +251,23 @@ def view_watchlist(request):
     return render(request, "auctions/watchlist.html", {
         "zipped_list": zipped_list
     })
+    
+
+# Add comment
+@login_required
+def add_comment(request, listing_id):
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        
+        if form.is_valid():
+            text = form.cleaned_data["text"]
+            auction = AuctionListing.objects.get(pk=listing_id)
+
+            comment = Comment(text=text, owner=request.user, auction=auction)
+            comment.save()
+            
+            messages.success(request, "Comment added.")
+            return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
+        else:
+            messages.error(request, "Error adding comment.")
+            return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
