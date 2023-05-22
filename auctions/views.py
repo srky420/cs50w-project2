@@ -274,6 +274,7 @@ def add_comment(request, listing_id):
             return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
         
 
+# Delete comment
 @login_required
 def delete_comment(request, listing_id):
     if request.method == "POST":
@@ -284,3 +285,18 @@ def delete_comment(request, listing_id):
             comment.delete()
         
         return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
+    
+    
+# View your listings
+@login_required
+def your_listings(request):
+    # Get all owned auctions
+    auctions = AuctionListing.objects.filter(owner=request.user).all()
+    bids = []
+    for auction in auctions:
+        bids.append(auction.bids.all().order_by("-amount").first())
+    zipped_list = zip(auctions, bids)
+
+    return render(request, "auctions/your-listings.html", {
+        "zipped_list": zipped_list
+    })

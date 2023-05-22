@@ -60,3 +60,12 @@ class Watchlist(models.Model):
 
     def __str__(self):
         return f"{self.user} watchlisted {self.auction.title}"
+    
+    
+# Winners model
+class Winner(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="winnings")
+    auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="winner")
+    
+    def __str__(self):
+        return f"{self.user} won auction: {self.auction}"

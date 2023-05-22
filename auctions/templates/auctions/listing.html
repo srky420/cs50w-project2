@@ -7,7 +7,7 @@
 {% block body %}
 
     <!-- Card -->
-    <div class="card mb-3 border-0 w-100 position-relative">
+    <div class="card mb-3 border-0 w-100 position-relative my-3">
 
         <!-- Watchlist -->
         {% if listing.owner == request.user %}
@@ -87,7 +87,7 @@
     <form action="{% url 'add_comment' listing.id %}" method="post" class="mt-3 mb-5">
         {% csrf_token %}
         {{ comment_form }}
-        <button type="submit" class="btn btn-sm btn-primary border-0">Comment</button>
+        <button type="submit" class="btn btn-sm btn-primary border-0 my-2">Comment</button>
     </form>
 
     {% for comment in comments %}

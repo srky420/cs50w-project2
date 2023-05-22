@@ -1,12 +1,12 @@
 {% extends "auctions/layout.html" %}
 
 {% block title %}
-Watchlist
+    Your Listings
 {% endblock %}
 
 {% block body %}
-    
-    <h3 class="my-3">Watchlist</h3>
+
+    <h3 class="my-3">Auctions You Own</h3>
 
     {% for auction, current_bid in zipped_list %}
     <div class="card mb-3 position-relative overflow-hidden rounded-0 w-75 shadow-sm">
@@ -17,7 +17,6 @@ Watchlist
             <button class="btn btn-success btn-sm disabled rounded-0 position-absolute">Active</button>
         {% endif %}
 
-        <a href="{% url 'watchlist' auction.id %}" class="btn btn-close btn-sm position-absolute" style="right: 0;"></a>
         <div class="row g-0">
 
             <!-- Card img -->
@@ -51,7 +50,7 @@ Watchlist
     </div>
 
     {% empty %}
-    
+
     <h4 class="my-5 text-center">Watchlist empty.</h4>
 
     {% endfor %}
