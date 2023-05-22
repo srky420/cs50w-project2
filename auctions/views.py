@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 
-from .models import User, AuctionListing, Watchlist, Bid, Comment
+from .models import User, AuctionListing, Watchlist, Bid, Comment, Category
 from .forms import AuctionListingForm, PlaceBidForm, CommentForm
 
 
@@ -24,7 +24,8 @@ def index(request):
     
     return render(request, "auctions/index.html", {
         "auctions": auctions,
-        "zipped_list": zipped_list
+        "zipped_list": zipped_list,
+        "categories": Category.objects.all()
     })
 
 
@@ -271,3 +272,15 @@ def add_comment(request, listing_id):
         else:
             messages.error(request, "Error adding comment.")
             return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
+        
+
+@login_required
+def delete_comment(request, listing_id):
+    if request.method == "POST":
+        comment_id = request.POST["comment_id"]
+        comment = Comment.objects.get(pk=comment_id)
+        
+        if comment.owner == request.user:
+            comment.delete()
+        
+        return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
