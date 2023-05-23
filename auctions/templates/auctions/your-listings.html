@@ -6,10 +6,11 @@
 
 {% block body %}
 
+    <!-- Auctions owned -->
     <h3 class="my-3">Auctions You Own</h3>
 
     {% for auction, current_bid in zipped_list %}
-    <div class="card mb-3 position-relative overflow-hidden rounded-0 w-75 shadow-sm">
+    <div class="card mb-3 position-relative overflow-hidden mx-auto rounded-0 w-75 shadow-sm">
 
         {% if auction.is_closed %}
             <button class="btn btn-danger btn-sm disabled rounded-0 position-absolute">Closed</button>
@@ -50,9 +51,51 @@
     </div>
 
     {% empty %}
+        <h4 class="my-5 text-center">You haven't created any Auctions yet.</h4>
+    {% endfor %}
 
-    <h4 class="my-5 text-center">Watchlist empty.</h4>
+    <!-- Auctions won -->
+    <h3 class="my-3 mt-5">Auctions You've won.</h3>
+
+    {% for auction, current_bid in zipped_list_winnings %}
+    <div class="card mb-3 position-relative overflow-hidden rounded-0 mx-auto w-75 shadow-sm">
+
+        
+        <button class="btn btn-success btn-sm disabled rounded-0 position-absolute">Won</button>
+        
+        <div class="row g-0">
+
+            <!-- Card img -->
+            <div class="col-md-4 w-auto border-end" style="height: 10rem;">
+                <img src="{{ auction.image.url }}" class="img-fluid" alt="listing-img" width="180">
+            </div>
+            <!-- Card img end -->
+
+            <!-- Card body -->
+            <div class="col-md-8">
+                <div class="card-body py-1">
+
+                    <!-- Card info -->
+                    <a href="{% url 'view_listing' auction.id %}" class="card-link">{{ auction.title }}</a>
+                    <p class="card-text text-overflow-hidden">{{ auction.description }}</p>
+
+                    <!-- Bid status -->
+                    <p class="card-text">
+                            <span class="h4 font-monospace">${{ current_bid.amount }}</span> <small class="text-muted mx-2">Winning bid by {{ current_bid.bidder }}</small>                            
+                        </span>
+                    </p>
+                    <p class="card-text"><small class="text-body-secondary">Created {{ auction.date_created }}</small></p>
+                </div>
+            </div>
+            <!-- Card body end -->
+        </div>
+    </div>
+
+    {% empty %}
+
+    <h4 class="my-5 text-center">You haven't won any Auctions yet.</h4>
 
     {% endfor %}
+
 
 {% endblock %}

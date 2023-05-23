@@ -44,11 +44,11 @@ Index
                                 <div class="card-body p-0 my-2">
                                     <a href="{% url 'view_listing' auction.id %}" class="card-link my-1">{{ auction.title }}</a>
                                     <p class="card-text my-0 text-overflow-hidden">{{ auction.description }}</p>
-                                    <h5 class="card-text my-2">Current bid:
+                                    <h5 class="card-text my-2">
                                         {% if current_bid %} 
-                                            <span class="font-monospace">${{ current_bid.amount }}</span>
+                                            Current bid: <span class="font-monospace">${{ current_bid.amount }}</span>
                                         {% else %}
-                                            <span class="font-monospace">${{ auction.starting_bid }}</span>
+                                            List price: <span class="font-monospace">${{ auction.starting_bid }}</span>
                                         {% endif %}
                                     </h5>
                                     <p class="card-text text-muted my-0"><small>Created {{ auction.date_created }}</small></p>

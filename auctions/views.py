@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 
-from .models import User, AuctionListing, Watchlist, Bid, Comment, Category
+from .models import User, AuctionListing, Watchlist, Bid, Comment, Category, Winner
 from .forms import AuctionListingForm, PlaceBidForm, CommentForm
 
 
@@ -135,7 +135,7 @@ def view_listing(request, listing_id):
             "listing": listing,
             "bids": bids,
             "winner_bid": current_bid,
-            "commetns": comments
+            "comments": comments
         })
     
     # Get watchlist obj
@@ -224,8 +224,15 @@ def close_listing(request, listing_id):
     # POST
     if request.method == "POST":
         auction = AuctionListing.objects.get(pk=listing_id)
+        bid = auction.bids.all().order_by("-amount").first()
+        
+        if bid:
+            winner = Winner(user=bid.bidder, auction=auction)
+            winner.save()
+        
         auction.is_closed = True
         auction.save()
+        
         
         return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
             
@@ -296,7 +303,20 @@ def your_listings(request):
     for auction in auctions:
         bids.append(auction.bids.all().order_by("-amount").first())
     zipped_list = zip(auctions, bids)
+    
+    # Get all won listings
+    winnings = Winner.objects.filter(user=request.user)
+    
+    auctions_won = []
+    winning_bids = []
+    
+    for w in winnings:
+        auctions_won.append(w.auction)
+        winning_bids.append(w.auction.bids.all().order_by("-amount").first())
+
+    zipped_list_winnings = zip(auctions_won, winning_bids)
 
     return render(request, "auctions/your-listings.html", {
-        "zipped_list": zipped_list
+        "zipped_list": zipped_list,
+        "zipped_list_winnings": zipped_list_winnings
     })

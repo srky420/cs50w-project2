@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block title %}
-{{ listing.title }}
+    {{ listing.title }}
 {% endblock %}
 
 {% block body %}
@@ -37,7 +37,13 @@
 
                     <!-- Show listing ownership -->
                     <p class="card-text my-0">
-                        <small class="text-body-secondary">{% if listing.owner == request.user %}Your listing{% else %}Owner {{ listing.owner }}{% endif %}</small>
+                        <small class="text-body-secondary">
+                            {% if listing.owner == request.user %}
+                                Your listing
+                            {% else %}
+                                Owner {{ listing.owner }}
+                            {% endif %}
+                        </small>
                     </p>
 
                     <hr>
@@ -54,8 +60,13 @@
                     <!-- Total bids -->
                     <p class="card-text text-muted mb-1">
                         {{ bids.count }} bid(s) so far. {% if current_bid.bidder == request.user %} Your bid is the current bid. {% endif %} 
-                        <a href="#" class="card-link text-muted">See all</a>
+                        {% if bids %}  <a class="card-link text-muted" id="bidlist-btn" style="cursor: pointer;">See all</a>{% endif %}
                     </p>
+                    <ul class="visually-hidden" id="bidlist">
+                        {% for bid in bids %}
+                            <li class="text-muted">{{ bid.bidder }} placed a bid of <span class="font-monospace">${{ bid.amount }}</span> on {{ bid.date_created }}</li>
+                        {% endfor %}
+                    </ul>
                    
                     {% if request.user == listing.owner %}
                         <!-- Close bidding -->
@@ -73,6 +84,7 @@
                     {% else %}
                         <h5 class="card-text my-3"><a href="{% url 'register' %}">Signup</a> to start bidding.</h5>
                     {% endif %}
+
                 </div>
             </div>
             <!-- Card info end -->
@@ -90,29 +102,6 @@
         <button type="submit" class="btn btn-sm btn-primary border-0 my-2">Comment</button>
     </form>
 
-    {% for comment in comments %}
-    <div class="card my-3 border-0">
-        <div class="row g-0">
-            <div class="col-md-4 border h-50" style="width: 5%;">
-                <img src="../../../media/images/default.jpg" class="img-fluid rounded-start" alt="...">
-            </div>
-            <div class="col-md-8" style="width: 95%;">
-                <div class="card-body py-0">
-                    <p class="card-title my-0"><a href="#">{{ comment.owner }}</a> <small class="mx-2 text-body-secondary">{{ comment.date_created }}</small></p>
-                    <p class="card-text my-0">{{ comment.text }}</p>
-                    {% if request.user == comment.owner %}
-                    <p class="card-text my-0">
-                        <form action="{% url 'delete_comment' listing.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
-                            <small><button type="submit" class="bg-transparent border-0 p-0 text-decoration-underline">Delete</button></small>
-                        </form>
-                    </p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
+    {% include "auctions/comments.html" %}
 
 {% endblock %}

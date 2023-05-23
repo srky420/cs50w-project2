@@ -1,0 +1,27 @@
+{% for comment in comments %}
+    <div class="card my-3 border-0">
+        <div class="row g-0">
+            <div class="col-md-4 border h-50" style="width: 5%;">
+                <img src="../../../media/images/default.jpg" class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8" style="width: 95%;">
+                <div class="card-body py-0">
+                    <p class="card-title my-0"><a href="#">{{ comment.owner }}</a> <small class="mx-2 text-body-secondary">{{ comment.date_created }}</small></p>
+                    <p class="card-text my-0">{{ comment.text }}</p>
+                    {% if request.user == comment.owner %}
+                    <p class="card-text my-0">
+                        <form action="{% url 'delete_comment' listing.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <small><button type="submit" class="bg-transparent border-0 p-0 text-decoration-underline">Delete</button></small>
+                        </form>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <h4>No comments.</h4>
+{% endfor %}
+
