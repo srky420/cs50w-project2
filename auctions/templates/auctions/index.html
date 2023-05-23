@@ -12,6 +12,7 @@ Index
         <div class="col col-2 border-end">
             <h4 class="mt-5">Categories</h4>
             <ul class="list-unstyled">
+                <li class="my-3"><a href="{% url 'index' %}">All</a></li>
                 {% for category in categories %}
                     <li class="my-3"><a href="{% url 'view_category' category.name %}">{{ category.name }}</a></li>
                 {% endfor %}
