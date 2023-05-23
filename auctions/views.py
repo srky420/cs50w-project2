@@ -148,7 +148,7 @@ def view_listing(request, listing_id):
     placebid_form = PlaceBidForm()
     comment_form = CommentForm()
     
-    return render(request, "auctions/listing.html", {
+    return render(request, "auctions/active-listing.html", {
         "listing": listing,
         "current_bid": current_bid,
         "bids": bids,
@@ -226,13 +226,13 @@ def close_listing(request, listing_id):
         auction = AuctionListing.objects.get(pk=listing_id)
         bid = auction.bids.all().order_by("-amount").first()
         
+        # Save winner if any
         if bid:
             winner = Winner(user=bid.bidder, auction=auction)
             winner.save()
         
         auction.is_closed = True
         auction.save()
-        
         
         return HttpResponseRedirect(reverse("view_listing", args=(listing_id,)))
             
@@ -264,6 +264,7 @@ def view_watchlist(request):
 # Add comment
 @login_required
 def add_comment(request, listing_id):
+    # POST
     if request.method == "POST":
         form = CommentForm(request.POST)
         
@@ -284,10 +285,12 @@ def add_comment(request, listing_id):
 # Delete comment
 @login_required
 def delete_comment(request, listing_id):
+    # POST
     if request.method == "POST":
         comment_id = request.POST["comment_id"]
         comment = Comment.objects.get(pk=comment_id)
         
+        # Delete user's comment
         if comment.owner == request.user:
             comment.delete()
         
@@ -302,6 +305,7 @@ def your_listings(request):
     bids = []
     for auction in auctions:
         bids.append(auction.bids.all().order_by("-amount").first())
+        
     zipped_list = zip(auctions, bids)
     
     # Get all won listings
