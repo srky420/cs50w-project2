@@ -19,7 +19,7 @@
 <body>
 
     <!-- Nav Start -->
-    <nav class="navbar bg-body-tertiary">
+    <nav class="navbar bg-light">
         <div class="container">
             <div class="d-flex w-100 justify-content-between px-2">
             {% if user.is_authenticated %}
@@ -52,7 +52,7 @@
                         <a class="nav-link" aria-current="page" href="{% url 'index' %}">Active Listings</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Categories</a>
+                        <a class="nav-link" aria-current="page" href="{% url 'view_categories' %}">Categories</a>
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item">
@@ -71,22 +71,21 @@
     </nav>
     <!-- Nav End -->
 
-    <!-- Body Block -->
-    <div class="container">
-        <!-- Messages -->
-        {% if messages %}
-        {% for msg in messages %}
-        <div class="alert alert-{% if msg.tags == 'error' %}danger{% else %}{{ msg.tags }}{% endif %} text-center border-0 rounded-0">
-            <i class="fa fa-exclamation mx-2"></i> {{ msg }}
-        </div>
-        {% endfor %}
-        {% endif %}
-        <!-- Messages End -->
+    <!-- Messages -->
+    {% if messages %}
+    {% for msg in messages %}
+    <div class="my-0 alert alert-{% if msg.tags == 'error' %}danger{% else %}{{ msg.tags }}{% endif %} text-center border-0 rounded-0">
+        <i class="fa fa-exclamation mx-2"></i> {{ msg }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    <!-- Messages End -->
 
+    <!-- Body -->
+    <div class="container">
         {% block body %}
         {% endblock %}
     </div>
-    <!-- Endblock -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"

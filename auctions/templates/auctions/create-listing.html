@@ -6,7 +6,9 @@
 
 {% block body %}
 
-    <h3 class="text-center my-3">Create New Listing</h3>
+    <h3 class="my-3">Create New Listing</h3>
+
+    <hr>
 
     <form action="{% url 'create_listing' %}" method="post" enctype="multipart/form-data" class="text-center">
         {% csrf_token %}

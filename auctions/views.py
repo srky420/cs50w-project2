@@ -23,7 +23,6 @@ def index(request):
     zipped_list = zip(auctions, bids)
     
     return render(request, "auctions/index.html", {
-        "auctions": auctions,
         "zipped_list": zipped_list,
         "categories": Category.objects.all()
     })
@@ -324,3 +323,30 @@ def your_listings(request):
         "zipped_list": zipped_list,
         "zipped_list_winnings": zipped_list_winnings
     })
+    
+    
+# View categories
+def view_categories(request):
+    categories = Category.objects.all()
+    return render(request, "auctions/categories.html", {
+        "categories": categories
+    })
+    
+    
+# View category specific
+def view_category(request, name):
+    # Get category, auctions, bids
+    category = Category.objects.get(name=name)
+    auctions = AuctionListing.objects.filter(category=category).all()
+    bids = []
+    for auction in auctions:
+        bids.append(auction.bids.all().order_by("-amount").first)
+        
+    zipped_list = zip(auctions, bids)
+    
+    return render(request, "auctions/index.html", {
+        "zipped_list": zipped_list,
+        "categories": Category.objects.all(),
+        "category": category
+    })
+    

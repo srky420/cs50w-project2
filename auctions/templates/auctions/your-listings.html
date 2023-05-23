@@ -9,6 +9,8 @@
     <!-- Auctions owned -->
     <h3 class="my-3">Auctions You Own</h3>
 
+    <hr>
+
     {% for auction, current_bid in zipped_list %}
     <div class="card mb-3 position-relative overflow-hidden mx-auto rounded-0 w-75 shadow-sm">
 
@@ -56,6 +58,8 @@
 
     <!-- Auctions won -->
     <h3 class="my-3 mt-5">Auctions You've won.</h3>
+
+    <hr>
 
     {% for auction, current_bid in zipped_list_winnings %}
     <div class="card mb-3 position-relative overflow-hidden rounded-0 mx-auto w-75 shadow-sm">

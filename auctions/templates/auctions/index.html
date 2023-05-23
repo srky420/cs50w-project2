@@ -13,13 +13,13 @@ Index
             <h4 class="mt-5">Categories</h4>
             <ul class="list-unstyled">
                 {% for category in categories %}
-                    <li class="my-3"><a href="">{{ category.name }}</a></li>
+                    <li class="my-3"><a href="{% url 'view_category' category.name %}">{{ category.name }}</a></li>
                 {% endfor %}
             </ul>
         </div>
 
         <div class="col col-10">
-            <h3 class="mt-3">Active Listings</h3>
+            <h3 class="mt-3">{% if category %}{{ category.name }}{% else %}Active Listings{% endif %}</h3>
             <div class="row row-cols-lg-4 row-cols-md-3 cols-sm-1 g-4">
                 {% for auction, current_bid in zipped_list %}
                 
