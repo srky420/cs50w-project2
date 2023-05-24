@@ -18,15 +18,15 @@
     </ul>
 
     <!-- Auctions owned -->
-    <div class="" id="tab-item-1">
+    <div class="my-4" id="tab-item-1">
         
         {% for auction, current_bid in zipped_list %}
         <div class="card mb-3 position-relative overflow-hidden mx-auto rounded-0 w-75 shadow-sm">
 
             {% if auction.is_closed %}
-                <button class="btn btn-danger btn-sm disabled rounded-0 position-absolute">Closed</button>
+                <button class="btn btn-danger btn-sm disabled rounded-0 position-absolute opacity-100">Closed</button>
             {% else %}
-                <button class="btn btn-success btn-sm disabled rounded-0 position-absolute">Active</button>
+                <button class="btn btn-success btn-sm disabled rounded-0 position-absolute opacity-100">Active</button>
             {% endif %}
 
             <div class="row g-0">
@@ -67,12 +67,12 @@
     </div>
 
     <!-- Auctions won -->
-    <div class="visually-hidden" id="tab-item-2">
+    <div class="my-4 visually-hidden" id="tab-item-2">
 
         {% for auction, current_bid in zipped_list_winnings %}
         <div class="card mb-3 position-relative overflow-hidden rounded-0 mx-auto w-75 shadow-sm">
 
-            <button class="btn btn-success btn-sm disabled rounded-0 position-absolute">Won</button>
+            <button class="btn btn-success btn-sm disabled rounded-0 position-absolute opacity-100">Won</button>
             
             <div class="row g-0">
 

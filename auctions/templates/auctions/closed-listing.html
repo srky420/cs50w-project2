@@ -60,13 +60,13 @@
                     <!-- Show winner -->
                     {% if winner_bid %}
                         {% if winner_bid.bidder == request.user %} 
-                            <h4 class="card-text">You have won this auction.</h4>
+                            <h4 class="card-text bg-success text-light text-center p-2">You have won this auction.</h4>
                             <p class="card-text">Contact owner at {{ listing.owner.email }}</p>
                         {% elif listing.owner == request.user %}
-                            <h4 class="card-text">User '{{ winner_bid.bidder }}' has won this auction.</h4>
+                            <h4 class="card-text bg-success text-light text-center p-2">{{ winner_bid.bidder }} has won this auction.</h4>
                             <p class="card-text">Contact winner at {{ winner_bid.bidder.email }}</p>
                         {% else %}
-                            <h4 class="card-text">User '{{ winner_bid.bidder }}' has won this auction.</h4>
+                            <h4 class="card-text bg-success text-light text-center p-2">{{ winner_bid.bidder }} has won this auction.</h4>
                         {% endif %}
                     {% endif %}
                    

@@ -11,22 +11,23 @@ class AuctionListingForm(ModelForm):
         widgets = {
             "description": Textarea()
         }
-        
+
     def __init__(self, *args, **kwargs):
         super(AuctionListingForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs["class"] = "form-control form-control-sm mx-auto w-50 my-2 rounded-0 border-dark-subtle"
 
-        
+
 # Place bid form
 class PlaceBidForm(ModelForm):
     class Meta:
         model = Bid
         fields = ["amount"]
         widgets = {
-            "amount": NumberInput(attrs={"class": "form-control form-control-sm w-50 my-1 rounded-0 border-dark-subtle"})
+            "amount": NumberInput(attrs={"class": "form-control form-control-sm w-50 my-1 rounded-0 border-dark-subtle",
+                                         "placeholder": "$"})
         }
-        
+
 
 # Comment form
 class CommentForm(ModelForm):
@@ -37,7 +38,6 @@ class CommentForm(ModelForm):
             "text": ""
         }
         widgets = {
-            "text": TextInput(attrs={"class": "form-control form-control-sm border-dark-subtle rounded-0 my-1 w-50", "placeholder": "Add a comment"})
+            "text": TextInput(attrs={"class": "form-control form-control-sm border-dark-subtle rounded-0 my-1 w-50",
+                                     "placeholder": "Add a comment"})
         }
-            
-            

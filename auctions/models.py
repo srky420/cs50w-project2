@@ -18,11 +18,13 @@ class Category(models.Model):
 
 # AuctionList model
 class AuctionListing(models.Model):
-    title = models.CharField(max_length=64, unique=True)
+    title = models.CharField(max_length=64)
     description = models.CharField(max_length=100)
-    starting_bid = models.IntegerField()
+    starting_bid = models.FloatField()
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="auctions")
     image = models.ImageField(upload_to="images/", default="images/default.jpg")
+    second_image = models.ImageField(upload_to="images/", default="images/default.jpg")
+    third_image = models.ImageField(upload_to="images/", default="images/default.jpg")
     date_created = models.DateTimeField(default=datetime.datetime.now())
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctions")
     is_closed = models.BooleanField(default=False)
@@ -39,7 +41,7 @@ class Bid(models.Model):
     auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="bids")
     
     def __str__(self):
-        return f"{self.bidder} placed a bid of: {self.amount} for {self.auction.title} on {self.date_created}"
+        return f"{self.bidder} placed a bid of: {self.amount} for auction: {self.auction.title} on {self.date_created}"
     
 
 # Comment model
@@ -50,7 +52,7 @@ class Comment(models.Model):
     date_created = models.DateTimeField(default=datetime.datetime.now())
     
     def __str__(self):
-        return f"{self.owner} commented: \"{self.text}\" on {self.auction.title}"
+        return f"{self.owner} commented: \"{self.text}\" on auction: {self.auction.title}"
     
 
 # Watchlist model
@@ -59,7 +61,7 @@ class Watchlist(models.Model):
     auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="watchlisted_by") 
 
     def __str__(self):
-        return f"{self.user} watchlisted {self.auction.title}"
+        return f"{self.user} watchlisted auction: {self.auction.title}"
     
     
 # Winners model
@@ -68,4 +70,4 @@ class Winner(models.Model):
     auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="winner")
     
     def __str__(self):
-        return f"{self.user} won auction for {self.auction}"
+        return f"{self.user} won auction: {self.auction}"

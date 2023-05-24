@@ -14,7 +14,7 @@ Index
             <ul class="list-unstyled">
                 <li class="my-3"><a href="{% url 'index' %}">All</a></li>
                 {% for category in categories %}
-                    <li class="my-3"><a href="{% url 'view_category' category.name %}">{{ category.name }}</a></li>
+                    <li class="my-3"><a class="link-offset-2" href="{% url 'view_category' category.name %}">{{ category.name }}</a></li>
                 {% endfor %}
             </ul>
         </div>
@@ -32,7 +32,7 @@ Index
                             <div class="card h-100 border-0 my-3 position-relative">
 
                                 {% if auction.owner == request.user %}
-                                    <button class="btn btn-primary btn-sm disabled rounded-0 position-absolute">Your Listing</button>
+                                    <button class="btn btn-primary btn-sm disabled rounded-0 position-absolute opacity-100">Your Listing</button>
                                 {% endif %}
 
                                 <!-- Card img -->

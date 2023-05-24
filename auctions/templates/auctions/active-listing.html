@@ -14,16 +14,20 @@
             <button class="btn btn-primary btn-sm disabled position-absolute rounded-0">Your Listing</button>
         {% else %}
             {% if watchlist %}
-                <a class="btn btn-dark btn-sm rounded-0 position-absolute" href="{% url 'watchlist' listing.id %}"><i class="fa fa-close"></i> Watchlist</a>
+                <a class="btn btn-dark btn-sm rounded-0 position-absolute z-1" href="{% url 'watchlist' listing.id %}"><i class="fa fa-close"></i> Watchlist</a>
             {% else %}
-                <a class="btn btn-dark btn-sm rounded-0 position-absolute" href="{% url 'watchlist' listing.id %}"><i class="fa fa-plus"></i> Watchlist</a>
+                <a class="btn btn-dark btn-sm rounded-0 position-absolute z-1" href="{% url 'watchlist' listing.id %}"><i class="fa fa-plus"></i> Watchlist</a>
             {% endif %}
         {% endif %}
 
         <div class="row g-0">
             <!-- Card image -->
-            <div class="col-md-6 border rounded-0 d-flex justify-content-center overflow-hidden shadow-sm" style="height: 30rem;">
-                <img src="{{ listing.image.url }}" class="img-fluid" alt="listing-image">
+            <div class="col-md-6 border rounded-0 d-flex justify-content-center overflow-hidden shadow-sm position-relative" style="height: 30rem;">
+                <i class="fa fa-caret-square-o-right position-absolute top-50 z-1" style="right: 5px;" onclick="swipe_right()"></i>
+                <i class="fa fa-caret-square-o-left position-absolute top-50 z-1" style="left: 5px;" onclick="swipe_left()"></i>
+                <img src="{{ listing.image.url }}" class="img-fluid imgs" alt="listing-image">
+                <img src="{{ listing.second_image.url }}" class="img-fluid visually-hidden imgs" alt="listing-image">
+                <img src="{{ listing.third_image.url }}" class="img-fluid visually-hidden imgs" alt="listing-image">
             </div>
             
             <!-- Card info -->
@@ -63,6 +67,7 @@
                         {% if bids %}  <a class="card-link text-muted" id="bidlist-btn" style="cursor: pointer;">See all</a>{% endif %}
                     </p>
                     <ul class="visually-hidden" id="bidlist">
+                        <li class="text-muted">{{ listing.owner }} created Auction for <span class="font-monospace">${{ listing.starting_bid }}</span> on {{ listing.date_created }} </li>
                         {% for bid in bids %}
                             <li class="text-muted">{{ bid.bidder }} placed a bid of <span class="font-monospace">${{ bid.amount }}</span> on {{ bid.date_created }}</li>
                         {% endfor %}
