@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Textarea, NumberInput, TextInput
+from django.forms import ModelForm, Textarea, NumberInput, TextInput, ImageField
 
 from .models import AuctionListing, Bid, Comment
 
@@ -7,9 +7,14 @@ from .models import AuctionListing, Bid, Comment
 class AuctionListingForm(ModelForm):
     class Meta:
         model = AuctionListing
-        fields = ["title", "description", "starting_bid", "category", "image"]
+        fields = ["title", "description", "starting_bid", "category", "image", "second_image", "third_image"]
         widgets = {
-            "description": Textarea()
+            "description": Textarea(),
+        }
+        labels = {
+            "image": "Pictures (optional)",
+            "second_image": "",
+            "third_image": "",
         }
 
     def __init__(self, *args, **kwargs):

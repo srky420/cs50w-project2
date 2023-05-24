@@ -14,9 +14,9 @@
     <div class="card mb-3 position-relative overflow-hidden rounded-0 mx-auto w-75 shadow-sm">
 
         {% if auction.is_closed %}
-            <button class="btn btn-danger btn-sm disabled rounded-0 position-absolute">Closed</button>
+            <button class="btn btn-danger btn-sm disabled rounded-0 position-absolute opacity-100">Closed</button>
         {% else %}
-            <button class="btn btn-success btn-sm disabled rounded-0 position-absolute">Active</button>
+            <button class="btn btn-success btn-sm disabled rounded-0 position-absolute opacity-100">Active</button>
         {% endif %}
 
         <a href="{% url 'watchlist' auction.id %}" class="btn btn-close btn-sm position-absolute" style="right: 0;"></a>

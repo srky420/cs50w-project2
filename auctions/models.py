@@ -19,9 +19,9 @@ class Category(models.Model):
 # AuctionList model
 class AuctionListing(models.Model):
     title = models.CharField(max_length=64)
-    description = models.CharField(max_length=100)
-    starting_bid = models.FloatField()
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="auctions")
+    description = models.CharField(max_length=150)
+    starting_bid = models.DecimalField(max_digits=5, decimal_places=2)
+    category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default="", related_name="auctions")
     image = models.ImageField(upload_to="images/", default="images/default.jpg")
     second_image = models.ImageField(upload_to="images/", default="images/default.jpg")
     third_image = models.ImageField(upload_to="images/", default="images/default.jpg")
@@ -35,7 +35,7 @@ class AuctionListing(models.Model):
     
 # Bid model
 class Bid(models.Model):
-    amount = models.IntegerField()
+    amount = models.DecimalField(max_digits=5, decimal_places=2)
     date_created = models.DateTimeField(default=datetime.datetime.now())
     bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="biddings")
     auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="bids")

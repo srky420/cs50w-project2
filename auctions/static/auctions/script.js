@@ -37,16 +37,36 @@ if (tab1) {
     });
 }
 
-// For images
-const imgs = document.querySelectorAll('.img');
+// For images swipe
+const imgs = document.querySelectorAll('.imgs');
 
 function swipe_right() {
-    
+    for (let i = 0; i < imgs.length; i++) {
+        if (!imgs[i].classList.contains('visually-hidden')) {
+            imgs[i].classList.add('visually-hidden');
+            if (imgs[i + 1]) {
+                imgs[i + 1].classList.remove('visually-hidden');
+                break;
+            } else {
+                imgs[0].classList.remove('visually-hidden');
+                break;
+            }
+        }
+    }
 }
 
 function swipe_left() {
-
+    for (let i = imgs.length - 1; i >= 0 ; i--) {
+        if (!imgs[i].classList.contains('visually-hidden')) {
+            imgs[i].classList.add('visually-hidden');
+            if (imgs[i - 1]) {
+                imgs[i - 1].classList.remove('visually-hidden');
+                break;
+            } else {
+                imgs[imgs.length - 1].classList.remove('visually-hidden');
+                break;
+            }
+        }
+    }
 }
-
-
 
