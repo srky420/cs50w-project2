@@ -25,41 +25,37 @@ Index
                 {% for auction, current_bid in zipped_list %}
                 
                     <!-- Col -->
-                    {% if not auction.is_closed %}
+                    <div class="col">
+                        <!-- Card -->
+                        <div class="card h-100 border-0 my-3 position-relative">
 
-                        <div class="col">
-                            <!-- Card -->
-                            <div class="card h-100 border-0 my-3 position-relative">
+                            {% if auction.owner == request.user %}
+                                <button class="btn btn-primary btn-sm disabled rounded-0 position-absolute opacity-100">Your Listing</button>
+                            {% endif %}
 
-                                {% if auction.owner == request.user %}
-                                    <button class="btn btn-primary btn-sm disabled rounded-0 position-absolute opacity-100">Your Listing</button>
-                                {% endif %}
-
-                                <!-- Card img -->
-                                <div class="card-img-top shadow-sm border rounded-0 d-flex overflow-hidden" style="height: 16rem;">
-                                    <img src="{% if auction.image %}{{ auction.image.url }}{% else %}/media/images/no-image.jpeg{% endif %}"
-                                    alt="auction-image" class="img-fluid align-self-center">
-                                </div>
-
-                                <!-- Card body -->
-                                <div class="card-body p-0 my-2">
-                                    <a href="{% url 'view_listing' auction.id %}" class="card-link my-1">{{ auction.title }}</a>
-                                    <p class="card-text my-0 text-overflow-hidden">{{ auction.description }}</p>
-                                    <h5 class="card-text my-2">
-                                        {% if current_bid %} 
-                                            Current bid: <span class="font-monospace">${{ current_bid.amount }}</span>
-                                        {% else %}
-                                            List price: <span class="font-monospace">${{ auction.starting_bid }}</span>
-                                        {% endif %}
-                                    </h5>
-                                    <p class="card-text text-muted my-0"><small>Created {{ auction.date_created }}</small></p>
-                                    <p class="card-text text-muted my-0"><small>Owner {{ auction.owner }}</small></p>
-                                </div>
+                            <!-- Card img -->
+                            <div class="card-img-top shadow-sm border rounded-0 d-flex overflow-hidden" style="height: 16rem;">
+                                <img src="{% if auction.image %}{{ auction.image.url }}{% else %}/media/images/no-image.jpeg{% endif %}"
+                                alt="auction-image" class="img-fluid align-self-center">
                             </div>
-                            <!-- Card end -->
-                        </div>
 
-                    {% endif %}
+                            <!-- Card body -->
+                            <div class="card-body p-0 my-2">
+                                <a href="{% url 'view_listing' auction.id %}" class="card-link my-1">{{ auction.title }}</a>
+                                <p class="card-text my-0 text-overflow-hidden">{{ auction.description }}</p>
+                                <h5 class="card-text my-2">
+                                    {% if current_bid %} 
+                                        Current bid: <span class="font-monospace">${{ current_bid.amount }}</span>
+                                    {% else %}
+                                        List price: <span class="font-monospace">${{ auction.starting_bid }}</span>
+                                    {% endif %}
+                                </h5>
+                                <p class="card-text text-muted my-0"><small>Created {{ auction.date_created }}</small></p>
+                                <p class="card-text text-muted my-0"><small>Owner {{ auction.owner }}</small></p>
+                            </div>
+                        </div>
+                        <!-- Card end -->
+                    </div>
                     <!-- Col end -->
 
                     {% empty %}

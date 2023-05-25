@@ -12,7 +12,7 @@ from .forms import AuctionListingForm, PlaceBidForm, CommentForm
 
 def index(request):
     # Get all auction listings
-    auctions = AuctionListing.objects.all()
+    auctions = AuctionListing.objects.filter(is_closed=False).all()
     
     # Get all bids
     bids = []
@@ -338,7 +338,7 @@ def view_categories(request):
 def view_category(request, name):
     # Get category, auctions, bids
     category = Category.objects.get(name=name)
-    auctions = AuctionListing.objects.filter(category=category).all()
+    auctions = AuctionListing.objects.filter(is_closed=False, category=category).all()
     bids = []
     for auction in auctions:
         bids.append(auction.bids.all().order_by("-amount").first)
