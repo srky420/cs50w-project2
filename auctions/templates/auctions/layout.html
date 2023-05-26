@@ -19,7 +19,7 @@
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Nav Start -->
-    <nav class="navbar bg-light">
+    <nav class="navbar bg-body-tertiary">
         <div class="container">
             <div class="d-flex w-100 justify-content-between px-2">
                 {% if user.is_authenticated %}
@@ -36,7 +36,7 @@
         </div>
     </nav>
     <hr class="my-0">
-    <nav class="navbar navbar-expand-lg bg-light-subtle shadow-sm">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{% url 'index' %}">
                 <h2>Auctions</h2>

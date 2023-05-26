@@ -100,7 +100,7 @@ def create_listing(request):
             instance.save()
             
             messages.success(request, "Auction Listing Created.")
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("view_listing", args=(instance.id,)))
         # Invalid form
         else:
             messages.error(request, "Invalid form submission.")
@@ -160,7 +160,7 @@ def view_listing(request, listing_id):
         
         
 # Add to watchlist
-@login_required
+@login_required(redirect_field_name="login")
 def watchlist(request, listing_id):
     # Check if already watchlisted
     auction = AuctionListing.objects.get(pk=listing_id)
