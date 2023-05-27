@@ -56,6 +56,7 @@
                         <a class="card-link text-muted" id="bidlist-btn" style="cursor: pointer;">See all</a>
                     </p>
                     <ul class="visually-hidden" id="bidlist">
+                        <li class="text-muted">{{ listing.owner }} created Auction for <span class="font-monospace">${{ listing.starting_bid }}</span> on {{ listing.date_created }} </li>
                         {% for bid in bids %}
                             <li class="text-muted">{{ bid.bidder }} placed a bid of <span class="font-monospace">${{ bid.amount }}</span> on {{ bid.date_created }}</li>
                         {% endfor %}
